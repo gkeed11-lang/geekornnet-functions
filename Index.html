@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GEEKORNNET - Connect Clients & Handymen</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      color: #333;
+    }
+    header {
+      background: linear-gradient(135deg, #007bff, #00c6ff);
+      color: white;
+      text-align: center;
+      padding: 60px 20px;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    header p {
+      font-size: 1.2rem;
+    }
+    .section {
+      padding: 40px 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .features, .categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .card h3 {
+      margin-bottom: 10px;
+      color: #007bff;
+    }
+    .cta {
+      text-align: center;
+      margin: 40px 0;
+    }
+    .cta button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .cta button:hover {
+      background: #0056b3;
+    }
+    .search-bar {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .search-bar input {
+      width: 80%;
+      max-width: 500px;
+      padding: 12px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    .handyman-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .handyman-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: left;
+      transition: transform 0.2s;
+    }
+    .handyman-card:hover {
+      transform: translateY(-4px);
+    }
+    .handyman-card h3 {
+      color: #007bff;
+      margin-bottom: 10px;
+    }
+    .stars span {
+      font-size: 22px;
+      color: #ccc;
+      margin-right: 5px;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .stars span.selected,
+    .stars span.hover {
+      color: gold;
+    }
+    .form-container {
+      display: none;
+      background: white;
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      max-width: 600px;
+    }
+    footer {
+      background: #333;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+    a.button-link {
+      display: inline-block;
+      margin-top: 10px;
+      text-decoration: none;
+      color: white;
+      background: #28a745;
+      padding: 8px 12px;
+      border-radius: 6px;
+    }
+    /* Rating feedback */
+    .rating-msg {
+      font-size: 0.9rem;
+      color: green;
+      margin-top: 5px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero Section -->
+  <header>
+    <h1>GEEKORNNET</h1>
+    <p>Connecting Clients & Handymen Seamlessly</p>
+  </header>
+
+  <!-- Features -->
+  <section class="section">
+    <h2>Why Choose Us?</h2>
+    <div class="features">
+      <div class="card">
+        <h3>🔧 Skilled Professionals</h3>
+        <p>Only qualified handymen with proven skills.</p>
+      </div>
+      <div class="card">
+        <h3>📍 Location-Based Matching</h3>
+        <p>Find the nearest handyman to your address.</p>
+      </div>
+      <div class="card">
+        <h3>⭐ Ratings & Reviews</h3>
+        <p>Hire with confidence using client feedback.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="section">
+    <h2>Popular Handyman Categories</h2>
+    <div class="categories">
+      <div class="card">⚡ Electricians</div>
+      <div class="card">🚰 Plumbers</div>
+      <div class="card">🔆 Solar Installers</div>
+      <div class="card">📹 CCTV Experts</div>
+      <div class="card">🛠 Carpenters</div>
+      <div class="card">🎨 Painters</div>
+    </div>
+  </section>
+
+  <!-- Search & Handyman List -->
+  <section class="section">
+    <h2>Find a Handyman</h2>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search by skill, location, or name...">
+    </div>
+    <div class="handyman-list" id="handymanList"></div>
+  </section>
+
+  <!-- Registration Form -->
+  <section class="section">
+    <div class="cta">
+      <button onclick="toggleForm()">📝 Register as Handyman</button>
+    </div>
+    <div class="form-container" id="formContainer">
+      <h2>Handyman Registration</h2>
+      <form id="registerForm">
+        <input type="text" name="Name" placeholder="Full Name" required><br><br>
+        <input type="email" name="Email" placeholder="Email" required><br><br>
+        <input type="text" name="Address" placeholder="Address" required><br><br>
+        <input type="text" name="Phone" placeholder="Phone Number" required><br><br>
+        <input type="text" name="Skills" placeholder="Skills (comma separated)" required><br><br>
+        <input type="text" name="Qualifications" placeholder="Qualifications"><br><br>
+        <input type="url" name="WhatsAppURL" placeholder="WhatsApp URL"><br><br>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 GEEKORNNET. All rights reserved.</p>
+  </footer>
+
+  <!-- Script Section -->
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbwJfmwYV3ivjiplStzvOY3QQAZfNxcMb_15pdUpm2jPbTBgLee7YlMhQstJJK5oAy0LTA/exec";
+    let handymen = [];
+
+    function toggleForm() {
+      const form = document.getElementById("formContainer");
+      form.style.display = form.style.display === "block" ? "none" : "block";
+    }
+
+    async function fetchHandymen() {
+      try {
+        const res = await fetch(API_URL);
+        handymen = await res.json();
+        displayHandymen(handymen);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function displayHandymen(list) {
+      const container = document.getElementById("handymanList");
+      container.innerHTML = "";
+      list.forEach(h => {
+        const rating = h.rating ? `⭐ ${h.rating}` : "No ratings yet";
+        container.innerHTML += `
+          <div class="handyman-card">
+            <h3>${h.name}</h3>
+            <p><b>Skills:</b> ${h.skills}</p>
+            <p><b>Address:</b> ${h.address}</p>
+            <p><b>Phone:</b> ${h.phone}</p>
+            <p><b>Email:</b> ${h.email}</p>
+            <p><b>Qualifications:</b> ${h.qualifications || ""}</p>
+            <p><b>Jobs Completed:</b> ${h.jobs || 0}</p>
+            <p><b>Rating:</b> ${rating}</p>
+            <a class="button-link" href="${h.whatsapp}" target="_blank">📩 Contact via WhatsApp</a><br><br>
+            <label>Rate this handyman: </label>
+            <div class="stars" data-name="${h.name}">
+              ${[1,2,3,4,5].map(num => `<span data-value="${num}">★</span>`).join("")}
+            </div>
+            <div class="rating-msg">✅ Rating submitted!</div>
+          </div>
+        `;
+      });
+
+      // Attach star interactions
+      document.querySelectorAll(".stars span").forEach(star => {
+        star.addEventListener("mouseover", function() {
+          const value = +this.dataset.value;
+          const stars = this.parentElement.querySelectorAll("span");
+          stars.forEach((s, i) => s.classList.toggle("hover", i < value));
+        });
+        star.addEventListener("mouseout", function() {
+          this.parentElement.querySelectorAll("span").forEach(s => s.classList.remove("hover"));
+        });
+        star.addEventListener("click", function() {
+          const value = +this.dataset.value;
+          const name = this.parentElement.dataset.name;
+          this.parentElement.querySelectorAll("span").forEach((s, i) => {
+            s.classList.toggle("selected", i < value);
+          });
+          rateHandyman(name, value, this.parentElement.nextElementSibling);
+        });
+      });
+    }
+
+    document.getElementById("searchInput").addEventListener("input", function() {
+      const value = this.value.toLowerCase();
+      const filtered = handymen.filter(h =>
+        h.name.toLowerCase().includes(value) ||
+        h.skills.toLowerCase().includes(value) ||
+        h.address.toLowerCase().includes(value)
+      );
+      displayHandymen(filtered);
+    });
+
+    async function rateHandyman(name, rating, msgEl) {
+      try {
+        await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ name, rating }),
+          headers: { "Content-Type": "application/json" }
+        });
+        msgEl.style.display = "block";
+        setTimeout(() => msgEl.style.display = "none", 2000);
+        fetchHandymen();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    fetchHandymen();
+  </script>
+
+  <!-- Floating AI Assistant -->
+  <script>
+  (function(){
+    if(!window.chatbase||window.chatbase("getState")!=="initialized"){
+      window.chatbase=(...arguments)=>{
+        if(!window.chatbase.q){window.chatbase.q=[]}
+        window.chatbase.q.push(arguments)
+      };
+      window.chatbase=new Proxy(window.chatbase,{
+        get(target,prop){
+          if(prop==="q"){return target.q}
+          return(...args)=>target(prop,...args)
+        }
+      })
+    }
+    const onLoad=function(){
+      const script=document.createElement("script");
+      script.src="https://www.chatbase.co/embed.min.js";
+      script.id="jAZQOcTk-VECnVsKRzzNq";  <!-- ✅ Your bot ID -->
+      script.domain="www.chatbase.co";
+      document.body.appendChild(script)
+    };
+    if(document.readyState==="complete"){onLoad()}
+    else{window.addEventListener("load",onLoad)}
+  })();
+  </script>
+
+</body>
+  </html>
